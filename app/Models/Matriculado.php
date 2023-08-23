@@ -23,4 +23,8 @@ class Matriculado extends Model
     {
         return $this->hasOne(Escolar::class);
     }
+    public function escolardos()
+    {
+        return $this->hasOne(Escolardos::class);
+    }
 }

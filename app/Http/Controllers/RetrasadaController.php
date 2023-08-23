@@ -3,14 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\Models\Retrasada;
+use App\Models\Alumno;
 use Illuminate\Http\Request;
 
 class RetrasadaController extends Controller
 {
     public function index()
     {
-        $retrasadas = Retrasada::all();
-        return view('tesoreria.retrasada', compact('retrasadas'));
+        $alumnos = Alumno::all();
+        return view('tesoreria.retrasada', compact('alumnos'));
     }
 
     /**
@@ -18,47 +19,13 @@ class RetrasadaController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create($id)
     {
-        return view('tesoreria.form_retrasadas');
+        $alumno = Alumno::findOrFail($id);
+        $retrasadas = Retrasada::whereIn('id_alumno', $alumno->pluck('id'))->get()->keyBy('id_alumno');
+        return view('tesoreria.form_retrasadas', compact('alumno', 'retrasadas'));
     }
 
-    public function sendData(Request $request){
-        $rules = [
-            'primernombre' => 'required|alpha',
-            'segundonombre'=> 'required|alpha',
-            'primerapellido' => 'required|alpha',
-            'segundoapellido'=> 'required|alpha',
-            'grado'=> 'required|alpha',
-            'anio'=> 'required|min:4|numeric',
-            'materiaretrasada'=> 'required|alpha',
-            'total'=> 'required|numeric',
-        ];
-
-        $messages= [
-            'total.numeric' => 'El total a pagar debe inculir solo números',
-            'anio.min'=> 'El Año debe incluir al menos 4 digitos',
-            'anio.numeric'=> 'El Año debe incluir solo valores numéricos',
-           ];
-
-        $this->validate($request, $rules, $messages);
-
-
-        $retrasadas = new Retrasada();
-        $retrasadas->primernombre = $request->input('primernombre');
-        $retrasadas->segundonombre = $request->input('segundonombre');
-        $retrasadas->primerapellido = $request->input('primerapellido');
-        $retrasadas->segundoapellido = $request->input('segundoapellido');
-        $retrasadas->grado = $request->input('grado');
-        $retrasadas->anio = $request->input('anio');
-        $retrasadas->materiaretrasada = $request->input('materiaretrasada');
-        $retrasadas->total = $request->input('total');
-        $retrasadas->save();
-        $notification = 'El alumno se ha creado correctamente';
-
-        return redirect('/retrasadas')->with(compact('notification'));
-
-    }
     /**
      * Store a newly created resource in storage.
      *
@@ -67,7 +34,47 @@ class RetrasadaController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // Recupera los valores de los checkboxes del formulario
+        $alumno = $request->input('id_alumno');
+        $grad = $request->input('grado');
+        $anio = $request->input('anio');
+        $materiar = $request->input('materiaretrasada');
+        $total = $request->input('total');
+
+
+        $registro_existente = Retrasada::where('id_alumno', $alumno)->count();
+        if ($registro_existente > 0) {
+            //Actualizar registro Consejeria del alumno
+            $retrasadas = Retrasada::where('id_alumno', $alumno)->first();
+
+            // Asigna los valores de los checkboxes al modelo
+            $retrasadas->grado = $grad;
+            $retrasadas->anio = $anio;
+            $retrasadas->materiaretrasada = $materiar;
+            $retrasadas->total = $total;
+
+            // Guarda el modelo en la base de datos
+            $retrasadas->save();
+        } else {
+            //Crear registro nuevo en Consejeria del alumno
+
+            // Crea una nueva instancia del modelo Consejeria
+            $retrasadas = new Retrasada();
+
+            // Asigna los valores de los checkboxes al modelo
+            $retrasadas->grado = $grad;
+            $retrasadas->anio = $anio;
+            $retrasadas->materiaretrasada = $materiar;
+            $retrasadas->total = $total;
+
+            // Guarda el modelo en la base de datos
+            $retrasadas->id_alumno = $alumno;
+            $retrasadas->save();
+        }
+
+
+        // Redirige a la página o realiza alguna acción adicional
+        return redirect('retrasadas');
     }
 
     /**
@@ -89,7 +96,6 @@ class RetrasadaController extends Controller
      */
     public function edit(Retrasada $retrasadas)
     {
-       
     }
 
     /**
@@ -99,7 +105,7 @@ class RetrasadaController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id )
+    public function update(Request $request, $id)
     {
     }
 
@@ -115,7 +121,7 @@ class RetrasadaController extends Controller
     {
         $retrasadas->delete();
         $deletename = $retrasadas->nombre;
-        $notification = 'El alumno '.$deletename.' ha eliminado correctamente';
+        $notification = 'El alumno ' . $deletename . ' ha eliminado correctamente';
         return redirect('/retrasadas')->with(compact('notification'));
     }
 }
