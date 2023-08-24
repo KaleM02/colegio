@@ -39,7 +39,16 @@ use App\Http\Controllers\formulariopreescolarController;
 use App\Http\Controllers\modalidadController;
 use App\Http\Controllers\SeccionconfigController;
 
-
+/*
+|--------------------------------------------------------------------------
+| Web Routes
+|--------------------------------------------------------------------------
+|
+| Here is where you can register web routes for your application. These
+| routes are loaded by the RouteServiceProvider within a group which
+| contains the "web" middleware group. Now create something great!
+|
+*/
 /*Ruta del dashboar login*/
 Auth::routes();
 
@@ -234,7 +243,7 @@ Route::group(['middleware' => ['auth','Admin']], function () {
     /*Ruta del dashboard secretaria*/
     Route::get('/dashboardsec', [dashboardsecController::class,
     'create'])->name('dashboardsec.index');
- 
+
     /*Rutas de los paneles */
     Route::get('/dashboard', [dashboardsecController::class,
     'create'])->name('dashboardsec.index');
@@ -251,9 +260,10 @@ Route::put('/usuarios/{usuarios}/deshabilitar', [UserController::class,'deshabil
 Route::post('/usuarios/{usuario}/habilitar', [UserController::class,'habilitar'])->name('usuarios.habilitar');
 route::delete('/usuarios/{usuarios}', [UserController::class,'destroy'])->name('usuarios.destroy');
 
-/*Rutas inicio y cieree de matricula */
+    /*Rutas inicio y cieree de matricula */
 Route::get('/prinperiodo', [PeriodomController::class,'index'])->name('periodo')
 ->middleware(VerificarPeriodoMatricula::class);
+
 Route::get('/iniciom', [InicioController::class,'create'])->name('inicio.create');
 Route::post('/iniciom', [InicioController::class,'store'])->name('inicio.store');
 
@@ -264,4 +274,15 @@ Route::get('/requisito', [requisitoController::class,
 Route::get('/requisito', [requisitoController::class,
 'create'])->name('requisito.index');
 
-});
+//cursostotales
+Route::get('/cursostotal', [CursostotalesController::class,'index'])->name('cursostotales.index');
+route::get('/periodocursos', [periodocursosController::class,'index'])->name('periodocursos.index');
+route::get('/alumnocursos/{curso}', [AlumnocursoController::class,'index'])->name('alumnocursos.index');
+
+
+//Tesoreria
+route::get('/tesoreriavistapago', [vistapagoController::class,'index'])->name('vistapago.index');
+route::post('/vistapagorealizar', [vistapagoController::class,'store']);
+route::post('/pagorealizar', [PagoaRealizaraController::class,'store'])->name('pagorealizar.store');
+
+
