@@ -334,3 +334,4 @@ Route::put('/escolarsiete/{escolarsiete}', [formularioescolarController::class,'
 //RUTAS DEL FORMULARIO DE PRE-ESCOLAR ORIENTACION
 Route::get('/preescolar', [formulariopreescolarController::class,'index'])->name('preescolarindex.index');
 
+});
