@@ -312,6 +312,7 @@ class AlumnoController extends Controller
         $estado = new Proceso();
         $estado->id = $id;
         $estado->matriculado = 'no';
+        $estado->curso_id = $request->input('curso_id');
         $estado->save();
 
         $escolar = new Escolar();
