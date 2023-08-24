@@ -38,17 +38,23 @@
         <i class="ni ni-tv-2 text-primary"></i> Panel
       </a>
     </li>
+    @hasrole('Admin|Secretaria')
     <li class="nav-item">
       <a class="nav-link " href="{{route('alumnos.index')}}">
         <i class="ni ni-hat-3"></i> Alumnos
       </a>
     </li>
+    @endhasrole
+
+    @hasrole('Admin|Secretaria')
     <li class="nav-item">
       <a class="nav-link " href="{{route('padres.index')}}">
         <i class="fas fa-user-tie text-orange"></i> Padres
       </a>
     </li>
+    @endhasrole
     
+    @hasrole('Admin|Secretaria')
     <li class="nav-item dropdown"> <!-- Cambiado a un elemento dropdown -->
       <a class="nav-link dropdown-toggle" href="#" id="secretariaDropdown" role="button" data-bs-toggle="dropdown">
         <i class="fas fa-chalkboard-teacher text-yellow"></i> Secretaria
@@ -58,11 +64,15 @@
         <li><a class="dropdown-item" href="{{route('cursos.index')}}">Grado/Seccion</a></li>
         <li><a class="dropdown-item" href="{{route('indexcompromiso.create')}}">Compromiso</a></li>
         <li><a class="dropdown-item" href="{{route('cursostotales.index')}}">Curso Totales</a></li>
+  
+    @hasrole('Admin')
         <li><a class="dropdown-item" href="{{route('periodo')}}">Periodos Matricula</a></li>
+        @endhasrole
       </ul>
     </li>
-
+    @endhasrole
     
+    @hasrole('Admin|Orientacion')
     <li class="nav-item dropdown"> <!-- Cambiado a un elemento dropdown -->
       <a class="nav-link dropdown-toggle" href="#" id="orientacionDropdown" role="button" data-bs-toggle="dropdown">
         <i class="fas fa-book-reader text-red"></i> Orientación
@@ -72,13 +82,17 @@
         <li><a class="dropdown-item" href="{{Route('escolar.index')}}">Formulario Escolar</a></li>
       </ul>
     </li>
+    @endhasrole
 
+    @hasrole('Admin|Consejeria')
     <li class="nav-item">
         <a href="{{Route('tabla.index')}}" class="nav-link " href="./examples/tables.html">
           <i class="fas fa-users text-red"></i> Consejeria
         </a>
       </li>
-
+      @endhasrole
+   
+      @hasrole('Admin|Tesoreria')
       <li class="nav-item dropdown"> <!-- Cambiado a un elemento dropdown -->
       <a class="nav-link dropdown-toggle" href="#" id="tesoreriaDropdown" role="button" data-bs-toggle="dropdown">
         <i class="fas fa-comment-dollar text-green"></i> Tesorería
@@ -89,7 +103,9 @@
         <li><a class="dropdown-item" href="{{Route('retrasadas.index')}}">Pago Retrasado</a></li>
       </ul>
     </li>
+    @endhasrole
 
+    @hasrole('Admin|Secretaria')
     <li class="nav-item dropdown"> <!-- Cambiado a un elemento dropdown -->
       <a class="nav-link dropdown-toggle" href="#" id="configuracionDropdown" role="button" data-bs-toggle="dropdown">
         <i class="fas fa-cogs text-blue"></i> Configuración
@@ -102,13 +118,16 @@
         <li><a class="dropdown-item" href="{{Route('seccionindex.index')}}">Sección</a></li>
       </ul>
     </li>
+    @endhasrole
 
+    @hasrole('Admin')
     <li class="nav-item">
         <a href="{{Route('usuarios.index')}}" class="nav-link " href="./examples/tables.html">
           <i class="	fas fa-users-cog text-Dark grey"></i> Personal
         </a>
       </li>
-
+      @endhasrole
+ 
     <li class="nav-item">
       <a href="#" class="nav-link " onclick="event.preventDefault(); document.getElementById('formlogout').submit();">
         <i class="fas fa-sign-in-alt"></i> Cerrar sesion

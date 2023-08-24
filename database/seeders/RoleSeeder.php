@@ -96,7 +96,19 @@ class RoleSeeder extends Seeder
        $permission = Permission::create(['name' => 'parientetransporte'])->assignRole($role1, $role2);
        $permission = Permission::create(['name' => 'terminar_matricula'])->assignRole($role1, $role2);
        
+       //Tesoreria 
+       $permission = Permission::create(['name' => 'pagorealizar.index'])->assignRole($role1, $role2);
+       $permission = Permission::create(['name' => 'retrasadas.index'])->assignRole($role1, $role2);
+       $permission = Permission::create(['name' => 'retrasadas.edit'])->assignRole($role1, $role2);
+       $permission = Permission::create(['name' => 'retrasadas.destroy'])->assignRole($role1, $role2);
+       $permission = Permission::create(['name' => 'firmacontratotesoreria.create'])->assignRole($role1, $role2);
+       $permission = Permission::create(['name' => 'firmacontratotesoreria.store'])->assignRole($role1, $role2);
+       $permission = Permission::create(['name' => 'vistapago.index'])->assignRole($role1, $role2);
+       $permission = Permission::create(['name' => 'pagorealizar.store'])->assignRole($role1, $role2);
 
+
+        
+         
 
      
 

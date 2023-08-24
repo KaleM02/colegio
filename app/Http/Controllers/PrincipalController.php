@@ -30,7 +30,7 @@ class PrincipalController extends Controller
         $periodos = Periodo::where('activo','=',1)->first();
         $alumnos = Matriculado::where('periodo_id','=',isset($periodos->id)?$periodos->id:0)->with('alumno','curso')->paginate(10);
         $cursos = Curso::where('idperiodo','=',isset($periodos->id)?$periodos->id:0)->pluck('niveleducativo', 'modalidad');  
-        }
+    }
 
 
         $periodoActivo = Periodo::whereActivo(1)->count();

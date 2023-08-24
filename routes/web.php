@@ -43,7 +43,7 @@ use App\Http\Controllers\SeccionconfigController;
 /*Ruta del dashboar login*/
 Auth::routes();
 
-Route::group(['middleware' => ['auth']], function () {
+Route::group(['middleware' => ['auth', 'role:Secretaria|Admin|Tesoreria|Orientacion|Consejeria']], function () {
 
     Route::get('/', [DashboardController::class,
     'index'])
@@ -197,6 +197,37 @@ route::get('/tablaindex', [SecretariaController::class,'index'])->name('tabla.in
 route::get('/consjindex/{id}', [SecretariaController::class,'create'])->name('consejeria.create');
 route::post('/tablaindex', [SecretariaController::class,'store'])->name('tabla.store');
 }); 
+
+Route::group(['middleware' => ['auth','role:Orientacion|Admin']], function () {
+    //RUTA DE LA VISTA PRINCIPAL DEL BOTON INGRESAR Y EXISTENTE
+Route::post('/periodo/{id}/cancelar', [PrincipalController::class, 'cancelarPeriodo'])->name('periodo.cancelar');
+
+//Ruta del dashboard orientacion
+ Route::get('/paneldeorientacion', [PanelorientacionController::class,'index'])->name('panelorientacion.index');
+
+//RUTAS DEL FORMULARIO ESCOLAR Y COLEGIO ORIENTACION
+Route::get('/escolar', [formularioescolarController::class,'index'])->name('escolar.index');
+Route::get('/escolar/crear', [formularioescolarController::class,'create'])->name('escolar.create');
+Route::get('/escolar/{escolar}/edit', [formularioescolarController::class,'edit'])->name('escolar.edit');
+Route::get('/escolardos/{escolar}/edit', [formularioescolarController::class,'editdos'])->name('escolar.editdos');
+Route::get('/escolartres/{escolar}/edit', [formularioescolarController::class,'edittres'])->name('escolar.edittres');
+Route::get('/escolarcuatro/{escolar}/edit', [formularioescolarController::class,'editcuatro'])->name('escolar.editcuatro');
+Route::get('/escolarcinco/{escolar}/edit', [formularioescolarController::class,'editcinco'])->name('escolar.editcinco');
+Route::get('/escolarseis/{escolar}/edit', [formularioescolarController::class,'editseis'])->name('escolar.editseis');
+Route::get('/escolarsiete/{escolar}/edit', [formularioescolarController::class,'editsiete'])->name('escolar.editsiete');
+Route::post('/escolar', [formularioescolarController::class, 'store'])->name('escolar.store');
+Route::put('/escolar/{escolar}', [formularioescolarController::class,'update'])->name('escolar.update');
+Route::put('/escolardos/{escolardos}', [formularioescolarController::class,'updatedos'])->name('escolar.updatedos');
+Route::put('/escolartres/{escolartres}', [formularioescolarController::class,'updatetres'])->name('escolar.updatetres');
+Route::put('/escolarcuatro/{escolarcuatro}', [formularioescolarController::class,'updatecuatro'])->name('escolar.updatecuatro');
+Route::put('/escolarcinco/{escolarcinco}', [formularioescolarController::class,'updatecinco'])->name('escolar.updatecinco');
+Route::put('/escolarseis/{escolarseis}', [formularioescolarController::class,'updateseis'])->name('escolar.updateseis');
+Route::put('/escolarsiete/{escolarsiete}', [formularioescolarController::class,'updatesiete'])->name('escolar.updatesiete');
+
+
+//RUTAS DEL FORMULARIO DE PRE-ESCOLAR ORIENTACION
+Route::get('/preescolar', [formulariopreescolarController::class,'index'])->name('preescolarindex.index');
+    }); 
 Route::group(['middleware' => ['auth','Admin']], function () {
 
 
@@ -232,34 +263,5 @@ Route::get('/requisito', [requisitoController::class,
 
 Route::get('/requisito', [requisitoController::class,
 'create'])->name('requisito.index');
-
-//RUTA DE LA VISTA PRINCIPAL DEL BOTON INGRESAR Y EXISTENTE
-Route::post('/periodo/{id}/cancelar', [PrincipalController::class, 'cancelarPeriodo'])->name('periodo.cancelar');
-
-//Ruta del dashboard orientacion
- Route::get('/paneldeorientacion', [PanelorientacionController::class,'index'])->name('panelorientacion.index');
-
-//RUTAS DEL FORMULARIO ESCOLAR Y COLEGIO ORIENTACION
-Route::get('/escolar', [formularioescolarController::class,'index'])->name('escolar.index');
-Route::get('/escolar/crear', [formularioescolarController::class,'create'])->name('escolar.create');
-Route::get('/escolar/{escolar}/edit', [formularioescolarController::class,'edit'])->name('escolar.edit');
-Route::get('/escolardos/{escolar}/edit', [formularioescolarController::class,'editdos'])->name('escolar.editdos');
-Route::get('/escolartres/{escolar}/edit', [formularioescolarController::class,'edittres'])->name('escolar.edittres');
-Route::get('/escolarcuatro/{escolar}/edit', [formularioescolarController::class,'editcuatro'])->name('escolar.editcuatro');
-Route::get('/escolarcinco/{escolar}/edit', [formularioescolarController::class,'editcinco'])->name('escolar.editcinco');
-Route::get('/escolarseis/{escolar}/edit', [formularioescolarController::class,'editseis'])->name('escolar.editseis');
-Route::get('/escolarsiete/{escolar}/edit', [formularioescolarController::class,'editsiete'])->name('escolar.editsiete');
-Route::post('/escolar', [formularioescolarController::class, 'store'])->name('escolar.store');
-Route::put('/escolar/{escolar}', [formularioescolarController::class,'update'])->name('escolar.update');
-Route::put('/escolardos/{escolardos}', [formularioescolarController::class,'updatedos'])->name('escolar.updatedos');
-Route::put('/escolartres/{escolartres}', [formularioescolarController::class,'updatetres'])->name('escolar.updatetres');
-Route::put('/escolarcuatro/{escolarcuatro}', [formularioescolarController::class,'updatecuatro'])->name('escolar.updatecuatro');
-Route::put('/escolarcinco/{escolarcinco}', [formularioescolarController::class,'updatecinco'])->name('escolar.updatecinco');
-Route::put('/escolarseis/{escolarseis}', [formularioescolarController::class,'updateseis'])->name('escolar.updateseis');
-Route::put('/escolarsiete/{escolarsiete}', [formularioescolarController::class,'updatesiete'])->name('escolar.updatesiete');
-
-
-//RUTAS DEL FORMULARIO DE PRE-ESCOLAR ORIENTACION
-Route::get('/preescolar', [formulariopreescolarController::class,'index'])->name('preescolarindex.index');
 
 });
