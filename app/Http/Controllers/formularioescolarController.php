@@ -2,12 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Escolardos;
 use App\Models\Escolar;
 use App\Models\Alumno;
 use App\Models\Curso;
 use App\Models\Padre;
-use App\Models\Padres;
 
 use Illuminate\Http\Request;
 
@@ -110,9 +108,9 @@ class formularioescolarController extends Controller
     public function edit($id)
     {
         $escolar = Escolar::findOrFail($id);
-        $alumnos = Alumno::findOrFail($id);
-        $cursos = Curso::findOrFail($id);
-        return view('orientacion.escolar.formularioescolaruno', compact('alumnos', 'escolar', 'cursos'));
+        $alumnos = Alumno::with('cursos')->paginate(10);
+        $curso = Curso::pluck('niveleducativo');
+        return view('orientacion.escolar.formularioescolaruno', compact('alumnos', 'escolar', 'curso'));
     }
 
     /**
@@ -125,28 +123,17 @@ class formularioescolarController extends Controller
     public function update(Request $request, $id)
     {
         $escolar = Escolar::findOrFail($id);
-        $rules = [
+        $request->validate([
 
-            'enumerodecelular' => 'nullable|min:8|numeric',
+            'enumerodecelular' => 'nullable|numeric',
             'eedad' => 'nullable|numeric',
             'procedencia' => 'nullable',
             'tiempolectivo' => 'nullable',
-            'telelectivo' => 'nullable|min:8|numeric',
+            'telelectivo' => 'nullable|numeric',
             'noelectivo' => 'nullable',
-            'telnoelectivo' => 'nullable|min:8|numeric',
+            'telnoelectivo' => 'nullable|numeric',
             'observaciones' => 'nullable'
-        ];
-
-        $messages = [
-            'enumerodecelular.numeric' => 'El número de celular deben ser dígitos del 1 al 10',
-            'enumerodecelular.min' => 'El número de celular mínimo debe tener 8 dígitos',
-            'telelectivo.numeric' => 'El teléfono fijo lectivo deben ser dígitos del 1 al 10',
-            'telelectivo.min' => 'El teléfono fijo lectivo mínimo debe tener 8 dígitos',
-            'telnoelectivo.numeric' => 'El teléfono fijo no lectivo deben ser dígitos del 1 al 10',
-            'telnoelectivo.min' => 'El teléfono fijo no lectivo mínimo debe tener 8 dígitos',
-            'eedad.numeric' => 'La edad deben ser dígitos del 1 al 10',
-        ];
-        $this->validate($request, $rules, $messages);
+        ]);
 
         // Actualiza los datos del formulario
         $escolar->alumno_id = $escolar->alumno_id;
@@ -165,13 +152,13 @@ class formularioescolarController extends Controller
 
         $escolar->save();
 
-        return redirect()->route('escolar.editdos',$id);
+        return redirect()->route('escolar.edit', $id);
     }
     
 
     public function editdos($id)
     {
-        $escolar= Escolardos::findOrFail($id);
+        $escolar= Escolar::findOrFail($id);
         $alumnos = Alumno::findOrFail($id);
         $padres = Padre::findOrFail($id);
         return view('orientacion.escolar.formularioescolardos', compact('alumnos', 'escolar', 'padres'));
@@ -186,47 +173,17 @@ class formularioescolarController extends Controller
      */
     public function updatedos(Request $request, $id)
     {
-        $escolar = Escolardos::findOrFail($id);
+        $escolar = Escolar::findOrFail($id);
         $request->validate([
 
         ]);
 
-        $escolar->alumno_id = $escolar->alumno_id;
+        // Actualiza los datos del formulario
         
-        $escolar->nacimientopadre = $request->input('nacimientopadre');
-        $escolar->edadpadre = $request->input('edadpadre');
-        
-        $escolar->nestudiopadre = $request->input('nestudiopadre');
-        $escolar->profesionpadre = $request->input('profesionpadre');
-        $escolar->ocupacionpadre = $request->input('ocupacionpadre');
-        
-        $escolar->nacimientomadre = $request->input('nacimientomadre');
-        $escolar->edadmadre = $request->input('edadmadre');
-        
-        $escolar->nestudiomadre = $request->input('nestudiomadre');
-        $escolar->profesionmadre = $request->input('profesionmadre');
-        $escolar->ocupacionmadre = $request->input('ocupacionmadre');
-        
-        $escolar->nacimientoencargado = $request->input('nacimientoencargado');
-        $escolar->edadencargado = $request->input('edadencargado');
-        
-        $escolar->nestudioencargado = $request->input('nestudioencargado');
-        $escolar->profesionencargado = $request->input('profesionencargado');
-        $escolar->ocupacionencargado = $request->input('ocupacionencargado');
-        
-        $escolar->vivescon = $request->input('vivescon');
-        $escolar->especifiquevives = $request->input('especifiquevives');
-        $escolar->motivo = $request->input('motivo');
-        $escolar->nmujeres = $request->input('nmujeres');
-        $escolar->nhombres = $request->input('nhombres');
-        $escolar->lugarocupado = $request->input('lugarocupado');
-        $escolar->checkpadrastro = $request->has('checkpadrastro') ? true : false;
-        $escolar->checkmadrastra = $request->has('checkmadrastra') ? true : false;
-        $escolar->otrapersona = $request->input('otrapersona');
 
         $escolar->save();
 
-        return redirect()->route('escolar.edittres', $id);
+        return redirect()->route('escolar.editdos', $id);
     }
 
     public function edittres($id)
@@ -276,7 +233,7 @@ class formularioescolarController extends Controller
 
         $escolar->save();
 
-        return redirect()->route('escolar.editcuatro', $id);
+        return redirect()->route('escolar.edittres', $id);
     }
 
     public function editcuatro($id)
@@ -330,7 +287,7 @@ class formularioescolarController extends Controller
 
         $escolar->save();
 
-        return redirect()->route('escolar.editcinco', $id);
+        return redirect()->route('escolar.editcuatro', $id);
     }
 
     public function editcinco($id)
@@ -379,7 +336,7 @@ class formularioescolarController extends Controller
 
         $escolar->save();
 
-        return redirect()->route('escolar.editseis', $id);
+        return redirect()->route('escolar.editcinco', $id);
     }
 
     public function editseis($id)
@@ -454,7 +411,7 @@ class formularioescolarController extends Controller
 
         $escolar->save();
 
-        return redirect()->route('escolar.editsiete', $id);
+        return redirect()->route('escolar.editseis', $id);
     }
 
     public function editsiete($id)
@@ -504,7 +461,7 @@ class formularioescolarController extends Controller
 
         $escolar->save();
 
-        return redirect()->route('escolar.index', $id);
+        return redirect()->route('escolar.editsiete', $id);
     }
     /**
      * Remove the specified resource from storage.

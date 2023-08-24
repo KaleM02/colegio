@@ -147,8 +147,11 @@ route::post('/pagorealizar', [PagoaRealizaraController::class,'store']);
 
 //RUTAS RETRASADA
 route::get('/retrasadas', [RetrasadaController::class,'index'])->name('retrasadas.index');
-route::get('/retrasadas/{id}', [RetrasadaController::class,'create'])->name('retrasadas.create');
-route::post('/retrasadas', [RetrasadaController::class,'store'])->name('retrasadas.store');
+route::get('/retrasadas/crear', [RetrasadaController::class,'create'])->name('retrasadas.create');
+route::get('/retrasadas/{retrasadas}/edit', [RetrasadaController::class,'edit'])->name('retrasadas.edit');
+route::post('/retrasadas', [RetrasadaController::class,'sendData']);
+route::put('/retrasadas/{retrasadas}', [RetrasadaController::class,'update'])->name('retrasadas.update');
+route::delete('/retrasadas/{retrasadas}', [RetrasadaController::class,'destroy'])->name('retrasadas.destroy');
 
 //RUTA DEL PERFIL
 Route::get('/profile', [UserProfileController::class, 'show'])->name('profile');

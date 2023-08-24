@@ -7,7 +7,6 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Curso;
 use App\Models\Periodo;
-use App\Models\Retrasada;
 
 class Alumno extends Model
 {
@@ -41,7 +40,7 @@ class Alumno extends Model
         'taxi',
         'conpadre',
         'solo',
-
+       
 
     ];
     public function padres()
@@ -54,18 +53,16 @@ class Alumno extends Model
         return $this->belongsToMany(Curso::class, 'matriculados', 'alumno_id', 'curso_id');
     }
 
-    public function periodos()
-    {
-        return $this->belongsToMany(Periodo::class, 'matriculados', 'alumno_id', 'periodo_id');
-    }
+        public function periodos()
+        {
+            return $this->belongsToMany(Periodo::class, 'matriculados', 'alumno_id', 'periodo_id');
+        }
 
-    public function pagos()
+        public function pagos()
     {
         return $this->hasMany(PagoRealizar::class, 'alumno_id');
     }
+        
 
-    public function retrasada()
-    {
-        return $this->hasMany(Retrasada::class, 'id_alumno');
-    }
+
 }

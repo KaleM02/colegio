@@ -41,9 +41,9 @@
     "oPaginate": {
         "sFirst": "Primero",
         "sLast":"Último",
-        "sNext":">>",
+        "sNext":"Siguiente",
         "dom": '<"toolbar">Bftrip',
-        "sPrevious": "<<"
+        "sPrevious": "Anterior"
     },
     "sProcessing":"Cargando..."
 }
