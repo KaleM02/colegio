@@ -286,3 +286,4 @@ route::post('/vistapagorealizar', [vistapagoController::class,'store']);
 route::post('/pagorealizar', [PagoaRealizaraController::class,'store'])->name('pagorealizar.store');
 
 
+}); 
